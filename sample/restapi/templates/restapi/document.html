@@ -1,0 +1,95 @@
+<html>
+<head>
+    <title>API documentation</title>
+
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://v3.bootcss.com/assets/css/docs.min.css" rel="stylesheet">
+
+    <script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.4.5/angular.js"></script>
+
+    <script src="js/client_jquery.js"></script>
+    <script src="js/client_ng.js"></script>
+
+</head>
+<body>
+
+<div class="container bs-docs-container" ng-controller="DocCtrl">
+<div class="row">
+<div id="apis" class="col col-md-9">
+
+<div class="panel-group" role="tablist" aria-multiselectable="true">
+{% for group, api_table in apis.iteritems %}
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="api_{{group}}">
+      <h4 class="panel-title">
+        {{ group|default:'全局' }}
+      </h4>
+    </div>
+    <div class="panel-body">
+{% for name, spec in api_table.iteritems %}
+
+<h4 id="api_{{group}}_{{name}}">{{ name }}  <small>{{ spec.spec.doc }}</small></h4>
+
+<h5>
+    <code>{{ spec.url }}</code>
+</h5>
+
+{% if spec.spec.params %}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <td>参数</td>
+            <td>类型</td>
+            <td>默认</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for param in spec.spec.params %}
+        <tr>
+            <td>{{param.name}}</td>
+            <td>{{param.type_name}}</td>
+            {% if param.required %}
+            <td><span class="label label-danger">必填</span></td>
+            {% else %}
+            <td>{{param.default}}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endfor %}
+    </div>
+  </div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+<div class="col col-md-3">
+<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
+  <ul class="nav bs-docs-sidenav">
+    {% for group, api_table in apis.iteritems %}
+    <li class="active">
+      <a href="#api_{{group}}">{{group|default:'全局'}}</a>
+      <ul class="nav">
+        {% for name, spec in api_table.iteritems %}
+        <li class="active"><a href="#api_{{group}}_{{name}}">{{name}}</a></li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+</nav>            
+ 
+</div>
+</div>
+</div>
+
+</body>
+</html>
